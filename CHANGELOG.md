@@ -1,3 +1,7 @@
+## Release 1.1.1
+
+* 67ed814 [bugfix] Update rubocop to the latest (#1)
+
 ## Release 1.1.0
 
 * cc19ee3 [feature] support FreeBSD 11.1 and OpenBSD 6.[12] (#17)
