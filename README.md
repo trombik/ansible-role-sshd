@@ -10,41 +10,13 @@ None
 
 | Variable | Description | Default |
 |----------|-------------|---------|
-| `sshd_user` | user name of `sshd` | `sshd` |
-| `sshd_group` | group name of `sshd` | `{{ __sshd_group }}` |
-| `sshd_service` | service name of `sshd` | `{{ __sshd_service }}` |
-| `sshd_conf_dir` | path to directory where `sshd` configuration files are kept | `{{ __sshd_conf_dir }}` |
-| `sshd_conf` | path to `sshd_config` | `{{ sshd_conf_dir }}/sshd_config` |
-| `sshd_sftp_server` | path to `stfp-server(8)` | `{{ __sshd_sftp_server }}` |
-| `sshd_config` | dict of `sshd_config` | `{"PermitRootLogin"=>"without-password", "PasswordAuthentication"=>"no", "UseDNS"=>"no", "UsePAM"=>"no", "Subsystem"=>"sftp {{ sshd_sftp_server }}"}` |
-| `sshd_config_pre` | string of `sshd_config(5)` before `sshd_config` | `""` |
-| `sshd_config_post` | string of `sshd_config(5)` after `sshd_config` | `""` |
-| `sshd_config_match` | list of `Match` keyword. see below | `[]` |
-
-## `ssh_config_match`
-
-This variable is a list of dict, creates `Match` blocks.
-
-| Key | value |
-|-----|-------|
-| `condition` | condition of the `Match` |
-| `keyword` | dict of directives and values pair |
-
-An example:
-
-```yaml
-sshd_config_match:
-  - condition: User foo
-    keyword:
-      X11Forwarding: "yes"
-```
-
-Which generates a block:
-
-```yaml
-Match User foo
-  X11Forwarding yes
-```
+| `sshd_user` | User name of `sshd` | `sshd` |
+| `sshd_group` | Group name of `sshd` | `{{ __sshd_group }}` |
+| `sshd_service` | Service name of `sshd` | `{{ __sshd_service }}` |
+| `sshd_conf_dir` | Path to directory where `sshd` configuration files are kept | `{{ __sshd_conf_dir }}` |
+| `sshd_conf` | Path to `sshd_config` | `{{ sshd_conf_dir }}/sshd_config` |
+| `sshd_sftp_server` | Path to `stfp-server(8)` | `{{ __sshd_sftp_server }}` |
+| `sshd_config` | Content of `sshd_config` | `""` |
 
 ## Debian
 
@@ -93,25 +65,23 @@ None
   roles:
     - ansible-role-sshd
   vars:
-    sshd_config:
-      PermitRootLogin: without-password
-      PasswordAuthentication: "no"
-      Port: 22
-      UseDNS: "no"
-      UsePAM: "no"
-      Subsystem: "sftp {{ sshd_sftp_server }}"
-    sshd_config_match:
-      - condition: User foo
-        keyword:
-          X11Forwarding: "yes"
-      - condition: User bar
-        keyword:
-          X11Forwarding: "no"
-    sshd_config_pre: |
+    sshd_config: |
       Port 2022
-    sshd_config_post: |
+
+      PasswordAuthentication no
+      PermitRootLogin without-password
+      Port 22
+      UseDNS no
+      {% if ansible_os_family != 'OpenBSD' %}
+      UsePAM no
+      {% endif %}
+      Subsystem sftp {{ sshd_sftp_server }}
       Match Address 192.168.1.1
         PasswordAuthentication yes
+      Match User foo
+        X11Forwarding yes
+      Match User bar
+        X11Forwarding no
 ```
 
 # License
@@ -134,6 +104,6 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 # Author Information
 
-Tomoyuki Sakurai <tomoyukis@reallyenglish.com>
+Tomoyuki Sakurai <y@trombik.org>
 
 This README was created by [ansible-role-init](https://gist.github.com/trombik/d01e280f02c78618429e334d8e4995c0)

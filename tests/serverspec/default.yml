@@ -2,22 +2,20 @@
   roles:
     - ansible-role-sshd
   vars:
-    sshd_config:
-      PermitRootLogin: without-password
-      PasswordAuthentication: "no"
-      Port: 22
-      UseDNS: "no"
-      UsePAM: "no"
-      Subsystem: "sftp {{ sshd_sftp_server }}"
-    sshd_config_match:
-      - condition: User foo
-        keyword:
-          X11Forwarding: "yes"
-      - condition: User bar
-        keyword:
-          X11Forwarding: "no"
-    sshd_config_pre: |
+    sshd_config: |
       Port 2022
-    sshd_config_post: |
+
+      PasswordAuthentication no
+      PermitRootLogin without-password
+      Port 22
+      UseDNS no
+      {% if ansible_os_family != 'OpenBSD' %}
+      UsePAM no
+      {% endif %}
+      Subsystem sftp {{ sshd_sftp_server }}
       Match Address 192.168.1.1
         PasswordAuthentication yes
+      Match User foo
+        X11Forwarding yes
+      Match User bar
+        X11Forwarding no
