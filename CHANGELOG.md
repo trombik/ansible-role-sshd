@@ -1,3 +1,9 @@
+## Release 2.0.0
+
+* 4ca857b incompatibility: remove `sshd_config_*`
+* fe3e611 bugfix: QA and update supported platform versions
+
+
 ## Release 1.1.1
 
 * 67ed814 [bugfix] Update rubocop to the latest (#1)
