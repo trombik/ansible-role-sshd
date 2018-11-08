@@ -6,12 +6,4 @@ sshd_conf: "{{ sshd_conf_dir }}/sshd_config"
 
 sshd_sftp_server: "{{ __sshd_sftp_server }}"
 
-sshd_config:
-  PermitRootLogin: without-password
-  PasswordAuthentication: "no"
-  UseDNS: "no"
-  UsePAM: "no"
-  Subsystem: "sftp {{ sshd_sftp_server }}"
-sshd_config_pre: ""
-sshd_config_post: ""
-sshd_config_match: []
+sshd_config: ""

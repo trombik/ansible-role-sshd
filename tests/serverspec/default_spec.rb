@@ -3,7 +3,7 @@ require "spec_helper"
 package = "openssh-server"
 service = "sshd"
 config  = "/etc/ssh/sshd_config"
-ports   = [22]
+ports   = [22, 2022]
 sftp_server = "/usr/lib/sftp-server"
 default_user = "root"
 default_group = "root"
