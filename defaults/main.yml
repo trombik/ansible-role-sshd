@@ -1,3 +1,4 @@
+---
 sshd_user: sshd
 sshd_group: "{{ __sshd_group }}"
 sshd_service: "{{ __sshd_service }}"
