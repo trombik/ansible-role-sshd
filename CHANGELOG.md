@@ -1,3 +1,8 @@
+## Release 2.0.1
+
+* 8c91290 bugfix: support FreeBSD 12.0 and OpenBSD 6.5
+* 671677b bugfix: QA
+
 ## Release 2.0.0
 
 * 4ca857b incompatibility: remove `sshd_config_*`
